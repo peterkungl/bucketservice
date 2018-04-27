@@ -1,0 +1,6 @@
+{
+  "org":"liferay",
+  "repo":"liferay-portal-ee",
+  "allowedSender":["peterkungl","csabaturcsan","gergelyszaz"],
+  "schedule":300
+}

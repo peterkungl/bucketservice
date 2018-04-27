@@ -1,3 +1,4 @@
+pytz
 Flask == 0.12.2
 Jira == 1.0.10
 pygithub == 1.37
