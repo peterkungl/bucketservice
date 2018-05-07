@@ -1,20 +1,21 @@
+import logging
 import time
+from datetime import datetime
 
 import pytz
 from flask import Flask
-import logging
-from datetime import datetime
-from sendToRegression import bucket, administrative_issue, close
-import commands
 from flask import json
 from github import Github
+
+import commands
+import envvariables
+from sendToRegression import bucket, administrative_issue, close
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("FlaskRest")
 handler = logging.FileHandler(filename='log.txt')
 handler.setLevel(logging.INFO)
 logger.addHandler(handler)
-env = json.load(open("wedeploy.json", 'r'))["env"]
 props = json.load(open("properties.json", 'r'))
 app = Flask(__name__)
 
@@ -23,8 +24,7 @@ def run():
 	while True:
 		logging.info('Polling started: %s', datetime.now(pytz.timezone('Europe/Paris')))
 
-		githubtoken = env["github"]
-		g = Github(githubtoken)
+		g = Github(envvariables.github)
 		org = g.get_organization(props["org"])
 		repo = org.get_repo(props["repo"])
 		prs = repo.get_pulls("open")

@@ -1,24 +1,23 @@
-from flask import json
-from jira import JIRA
 import base64
-from github import Github
-import re
 import logging
+import re
+
+from flask import json
+from github import Github
+from jira import JIRA
 
 import constants
+import envvariables
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("FlaskRest")
 handler = logging.FileHandler(filename='log.txt')
 handler.setLevel(logging.INFO)
 logger.addHandler(handler)
-env = json.load(open("wedeploy.json", 'r'))["env"]
 props = json.load(open("properties.json", 'r'))
-githubtoken = env["github"]
-jirauser = env["jirauser"]
-jirapw = env["jirapw"]
-jira = JIRA(env["jiraUrl"], basic_auth=(jirauser, base64.b64decode(jirapw).decode('utf-8')))
-g = Github(githubtoken)
+
+jira = JIRA(envvariables.jiraUrl, basic_auth=(envvariables.jirauser, base64.b64decode(envvariables.jirapw).decode('utf-8')))
+g = Github(envvariables.github)
 org = g.get_organization(props["org"])
 repo = org.get_repo(props["repo"])
 
